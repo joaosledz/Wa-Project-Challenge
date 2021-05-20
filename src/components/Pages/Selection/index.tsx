@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { formApi, formType } from 'services';
+import { formApi } from 'services';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,17 +27,20 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         padding: '4rem',
+        margin: '0px',
     },
     title: {
-        fontSize: '2rem',
+        fontSize: '2.5rem',
         textAlign: 'center',
         fontFamily: 'Bangers',
+        color: 'white',
     },
     textField: {
         padding: '0px',
     },
     mainButton: {
-        color: 'green',
+        backgroundColor: 'green',
+        color: 'white',
     },
     historyButton: {
         padding: '0px',
@@ -48,56 +51,55 @@ const SelectionPage: React.FC = () => {
     const classes = useStyles();
     const [numQuest, setNumQuest] = useState<string>();
 
-    const onSubmit = useCallback(
-        async (data: formType) => {
-            console.log('Entrou');
-            try {
-                await formApi.get(parseInt(numQuest!, 10));
-            } catch (err) {
-                console.log(err);
-            }
-        },
-        [numQuest]
-    );
+    const onSubmit = async () => {
+        try {
+            if (numQuest) await formApi.get(parseInt(numQuest, 10));
+        } catch (err) {
+            // console.log(err);
+        }
+    };
     return (
         <div className={classes.root}>
-            <Grid container component={Paper} md={3} spacing={3}>
+            <Grid container direction="column" spacing={3} md={3}>
                 <Grid
                     className={classes.title}
                     item
                     component={Typography}
                     md={12}
                 >
-                    Quantidade de perguntas
+                    Gerador de Perguntas
                 </Grid>
-                <Grid
-                    className={classes.textField}
-                    item
-                    component={TextField}
-                    value={numQuest}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        setNumQuest(event.target.value)
-                    }
-                    variant="outlined"
-                    md={12}
-                />
-                <Grid
-                    className={classes.mainButton}
-                    item
-                    onClick={() => onSubmit}
-                    component={Button}
-                    md={12}
-                >
-                    Iniciar
-                </Grid>
-                <Grid
-                    disabled
-                    className={classes.historyButton}
-                    item
-                    component={Button}
-                    md={12}
-                >
-                    Histórico de resultados
+                <Grid container item component={Paper} spacing={3} md={12}>
+                    <Grid
+                        className={classes.textField}
+                        item
+                        component={TextField}
+                        value={numQuest}
+                        placeholder="Quantidade de perguntas"
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => setNumQuest(event.target.value)}
+                        variant="outlined"
+                        md={12}
+                    />
+                    <Grid
+                        className={classes.mainButton}
+                        item
+                        onClick={() => onSubmit()}
+                        component={Button}
+                        md={12}
+                    >
+                        Iniciar
+                    </Grid>
+                    <Grid
+                        disabled
+                        className={classes.historyButton}
+                        item
+                        component={Button}
+                        md={12}
+                    >
+                        Histórico de resultados
+                    </Grid>
                 </Grid>
             </Grid>
         </div>
