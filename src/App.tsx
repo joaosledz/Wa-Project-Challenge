@@ -2,15 +2,21 @@
 // import './yupLocale';
 
 import React, { memo } from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Pages from 'components/Pages';
+import theme from 'styles/theme';
+import GlobalCss from 'styles/global';
 
 const App: React.FC = memo(() => {
     return (
-        <>
-            <CssBaseline />
-            <Pages />
-        </>
+        <div className="App">
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Pages />
+                <GlobalCss />
+            </ThemeProvider>
+        </div>
     );
 });
 
