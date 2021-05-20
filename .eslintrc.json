@@ -20,6 +20,15 @@
     },
     "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
     "rules": {
+        "no-restricted-globals": ["error"],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "import/no-extraneous-dependencies": [
+            "error",
+            { "devDependencies": true }
+        ],
+        "camelcase": "off",
+        "@typescript-eslint/camelcase": "off",
         "prettier/prettier": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
