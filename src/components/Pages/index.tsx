@@ -3,9 +3,9 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import SelectionPage from './Selection';
 
-const Pages = memo(() => {
+const Pages: React.FC = memo(() => {
     // const renderEmpty = useCallback(() => <div />, []);
-    const renderRedirect = useCallback(() => <Redirect to="/" />, []);
+    const renderRedirect = useCallback(() => <Redirect to="/selecao" />, []);
 
     return (
         <BrowserRouter>
