@@ -44,10 +44,6 @@ const useStyles = makeStyles(() => ({
 
 const SelectionPage: React.FC = () => {
     const history = useHistory();
-
-    //   const redirect = () => {
-    //     history.push('/your-path')
-    //   }
     const classes = useStyles();
     const { setState } = useContext(FormContext);
     const [numQuest, setNumQuest] = useState<string>();
@@ -57,15 +53,16 @@ const SelectionPage: React.FC = () => {
             if (numQuest)
                 await formApi.get(parseInt(numQuest, 10)).then(response => {
                     setState(response.data);
+                    localStorage.setItem(
+                        'currentForm',
+                        JSON.stringify(response.data.results)
+                    );
                 });
             history.push('/formulario');
         } catch (err) {
             // console.log(err);
         }
     };
-    // useEffect(() => {
-    //     console.log(choosed);
-    // }, [choosed]);
     return (
         <div className={classes.root}>
             <Grid container direction="column" spacing={3} md={3}>
@@ -86,7 +83,7 @@ const SelectionPage: React.FC = () => {
                             value={numQuest}
                             type="number"
                             inputProps={{
-                                min: 0,
+                                min: 1,
                                 max: 100,
                                 style: {
                                     textAlign: 'center',

@@ -21,6 +21,7 @@
     "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
     "rules": {
         "no-restricted-globals": ["error"],
+        "jsx-a11y/label-has-associated-control": "off",
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": ["error"],
         "import/no-extraneous-dependencies": [
@@ -29,7 +30,9 @@
         ],
         "camelcase": "off",
         "react/prop-types": "off",
+        "react/jsx-props-no-spreading": "off",
         "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/ban-types": "off",
         "prettier/prettier": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",

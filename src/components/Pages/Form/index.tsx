@@ -1,12 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
+import { Radio, FormControlLabel } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import FormContext from 'contexts/form';
-// import Button from 'components/mainButton';
+import { Formik, Form, useField, FieldAttributes } from 'formik';
+import { submitFormType } from 'interfaces/form';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -23,7 +24,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         padding: '2rem',
         minHeight: '60vh',
-        // minWidth: '60vw',
         margin: '0px',
     },
     title: {
@@ -35,28 +35,59 @@ const useStyles = makeStyles(() => ({
     questionContainer: {
         alignSelf: 'flex-start',
     },
-    textField: {
-        padding: '0px',
-    },
 }));
 
 const SelectionPage: React.FC = () => {
     const classes = useStyles();
-    const { state } = useContext(FormContext);
-    const [presentQuest, setPresentQuest] = useState<number>(0);
+    const history = useHistory();
+    const [currentQuest, setcurrentQuest] = useState<number>(0);
+    const [currentForm, setcurrentForm] = useState<submitFormType>();
+    const storageForm = localStorage.getItem('currentForm');
     const handleNextQuestion = () => {
-        if (presentQuest < state.results.length - 1)
-            setPresentQuest(presentQuest + 1);
+        if (currentForm) {
+            if (currentQuest < currentForm.length - 1)
+                setcurrentQuest(currentQuest + 1);
+        }
     };
     const handlePreviousQuestion = () => {
-        if (presentQuest > 0) setPresentQuest(presentQuest - 1);
+        if (currentQuest > 0) setcurrentQuest(currentQuest - 1);
     };
+    // Criar componente para o título da pergunta
+    type MyRadioProps = { label: string } & FieldAttributes<{}>;
+
+    const MyRadio: React.FC<MyRadioProps> = ({ label, ...props }) => {
+        const [field] = useField<{}>(props);
+        return (
+            <Grid md={12}>
+                <FormControlLabel
+                    {...field}
+                    control={<Radio />}
+                    label={label}
+                />
+            </Grid>
+        );
+    };
+
     useEffect(() => {
-        console.log(presentQuest);
-    }, [presentQuest]);
+        if (storageForm) {
+            const auxValues: submitFormType = JSON.parse(storageForm);
+            auxValues.forEach((option, index) => {
+                auxValues[index].allAnswers = [option.correct_answer]
+                    .concat(option.incorrect_answers)
+                    .sort(() => Math.random() - 0.5);
+            });
+            setcurrentForm(auxValues);
+        }
+    }, [storageForm]);
+
+    function onSubmit(values: any) {
+        console.log(values);
+        history.push('/selecao');
+    }
+
     return (
         <div className={classes.root}>
-            {state.results && (
+            {currentForm && (
                 <Grid container direction="column" spacing={3} md={7}>
                     <Grid
                         className={classes.title}
@@ -66,48 +97,103 @@ const SelectionPage: React.FC = () => {
                     >
                         Gerador de Perguntas
                     </Grid>
-                    <Grid
-                        component={Paper}
-                        className={classes.paper}
-                        container
-                        direction="row"
-                        justify="space-between"
-                        alignItems="flex-end"
-                        spacing={3}
-                        md={12}
-                    >
-                        {state.results.map((item, index) => (
-                            <>
-                                {index === presentQuest && (
-                                    <Grid
-                                        container
-                                        component={Typography}
-                                        className={classes.questionContainer}
-                                    >
-                                        {index + 1} - {item.question}
-                                    </Grid>
-                                )}
-                            </>
-                        ))}
-                        <Grid
-                            item
-                            md={2}
-                            component={Button}
-                            // text="Anterior"
-                            onClick={() => handlePreviousQuestion()}
-                        >
-                            Anterior
-                        </Grid>
-                        <Grid
-                            item
-                            md={2}
-                            component={Button}
-                            // text="Próxima"
-                            onClick={() => handleNextQuestion()}
-                        >
-                            Próxima
-                        </Grid>
-                    </Grid>
+                    <Formik
+                        initialValues={{
+                            questions: currentForm,
+                            answers: [],
+                        }}
+                        onSubmit={onSubmit}
+                        render={({ values }) => (
+                            <Paper>
+                                <Grid
+                                    component={Form}
+                                    className={classes.paper}
+                                    container
+                                    direction="row"
+                                    justify="space-between"
+                                    alignItems="flex-end"
+                                    spacing={3}
+                                    md={12}
+                                >
+                                    <>
+                                        {values.questions.map((item, index) => (
+                                            <>
+                                                {index === currentQuest && (
+                                                    <>
+                                                        <Grid
+                                                            container
+                                                            component={
+                                                                Typography
+                                                            }
+                                                            className={
+                                                                classes.questionContainer
+                                                            }
+                                                        >
+                                                            {`${index + 1}-${
+                                                                item.question
+                                                            }`}
+                                                        </Grid>
+                                                        <Grid container>
+                                                            {item.allAnswers.map(
+                                                                option => (
+                                                                    <MyRadio
+                                                                        name={`answers[${index}]`}
+                                                                        type="radio"
+                                                                        value={
+                                                                            option
+                                                                        }
+                                                                        label={
+                                                                            option
+                                                                        }
+                                                                    />
+                                                                )
+                                                            )}
+                                                        </Grid>
+                                                    </>
+                                                )}
+                                            </>
+                                        ))}
+                                        {currentQuest !== 0 ? (
+                                            <Grid
+                                                item
+                                                md={2}
+                                                component={Button}
+                                                onClick={() =>
+                                                    handlePreviousQuestion()
+                                                }
+                                            >
+                                                Anterior
+                                            </Grid>
+                                        ) : (
+                                            <Grid md={2} />
+                                        )}
+                                        {currentForm.length - 1 >
+                                        currentQuest ? (
+                                            <Grid
+                                                item
+                                                md={2}
+                                                component={Button}
+                                                onClick={() =>
+                                                    handleNextQuestion()
+                                                }
+                                            >
+                                                Próxima
+                                            </Grid>
+                                        ) : (
+                                            <Grid
+                                                item
+                                                md={2}
+                                                component={Button}
+                                                type="submit"
+                                            >
+                                                Enviar
+                                            </Grid>
+                                        )}
+                                    </>
+                                </Grid>
+                            </Paper>
+                        )}
+                    />
                 </Grid>
             )}
         </div>
