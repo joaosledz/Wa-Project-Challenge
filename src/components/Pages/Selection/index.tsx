@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -42,6 +43,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SelectionPage: React.FC = () => {
+    const history = useHistory();
+
+    //   const redirect = () => {
+    //     history.push('/your-path')
+    //   }
     const classes = useStyles();
     const { setState } = useContext(FormContext);
     const [numQuest, setNumQuest] = useState<string>();
@@ -52,6 +58,7 @@ const SelectionPage: React.FC = () => {
                 await formApi.get(parseInt(numQuest, 10)).then(response => {
                     setState(response.data);
                 });
+            history.push('/formulario');
         } catch (err) {
             // console.log(err);
         }
@@ -125,6 +132,7 @@ const SelectionPage: React.FC = () => {
                             text="CANCEL"
                             xs={6}
                         />
+
                         <Grid
                             item
                             component={Button}
