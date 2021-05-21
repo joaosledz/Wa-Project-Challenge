@@ -28,6 +28,7 @@
             { "devDependencies": true }
         ],
         "camelcase": "off",
+        "react/prop-types": "off",
         "@typescript-eslint/camelcase": "off",
         "prettier/prettier": "error",
         "react-hooks/rules-of-hooks": "error",
