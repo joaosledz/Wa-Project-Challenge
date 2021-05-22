@@ -62,7 +62,7 @@ const SelectionPage: React.FC = () => {
                     const res = response.data;
                     res.results.forEach((item, index) => {
                         res.results[index].question = item.question.replace(
-                            '/[&#039;s][&][acute;]/g',
+                            /&quot|&#039;s|&ldquo;|&rdquo;|&#039;|;/g,
                             ''
                         );
                     });
