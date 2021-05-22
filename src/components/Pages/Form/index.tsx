@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import { Radio, FormControlLabel } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { Formik, Form, useField, FieldAttributes } from 'formik';
-import { submitFormType } from 'interfaces/form';
+import { submitFormType, submitType, reportType } from 'interfaces/form';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
         position: 'relative',
         display: 'flex',
         padding: '2rem',
-        minHeight: '60vh',
+        minHeight: '50vh',
         margin: '0px',
     },
     title: {
@@ -34,6 +34,8 @@ const useStyles = makeStyles(() => ({
     },
     questionContainer: {
         alignSelf: 'flex-start',
+        fontSize: '1.4rem',
+        fontWeight: 'bold',
     },
 }));
 
@@ -51,6 +53,15 @@ const SelectionPage: React.FC = () => {
     };
     const handlePreviousQuestion = () => {
         if (currentQuest > 0) setcurrentQuest(currentQuest - 1);
+    };
+    // Calcula a pontuação
+    const score = (data: submitType) => {
+        let correctScore = 0;
+        data.questions.forEach((question, index) => {
+            if (question.correct_answer === data.answers[index])
+                correctScore += 1;
+        });
+        return correctScore;
     };
     // Criar componente para o título da pergunta
     type MyRadioProps = { label: string } & FieldAttributes<{}>;
@@ -80,15 +91,21 @@ const SelectionPage: React.FC = () => {
         }
     }, [storageForm]);
 
-    function onSubmit(values: any) {
-        console.log(values);
-        history.push('/selecao');
+    function onSubmit(values: submitType) {
+        const correctAnswers = score(values);
+        const report: reportType = {
+            wrongAnswers: values.questions.length - correctAnswers,
+            correctAnswers,
+            ...values,
+        };
+        localStorage.setItem('report', JSON.stringify(report));
+        history.push('/relatorio');
     }
 
     return (
         <div className={classes.root}>
             {currentForm && (
-                <Grid container direction="column" spacing={3} md={7}>
+                <Grid container direction="column" spacing={3} md={6}>
                     <Grid
                         className={classes.title}
                         item

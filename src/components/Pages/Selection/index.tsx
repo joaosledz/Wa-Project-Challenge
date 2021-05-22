@@ -4,6 +4,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import ButtonMT from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import { formApi } from 'services';
 import FormContext from 'contexts/form';
@@ -36,9 +38,13 @@ const useStyles = makeStyles(() => ({
         textAlign: 'center',
         fontFamily: 'Bangers',
         color: 'black',
+        justifyContent: 'center',
     },
     textField: {
         padding: '0px',
+    },
+    button: {
+        minHeight: '5rem',
     },
 }));
 
@@ -52,7 +58,14 @@ const SelectionPage: React.FC = () => {
         try {
             if (numQuest)
                 await formApi.get(parseInt(numQuest, 10)).then(response => {
-                    setState(response.data);
+                    const res = response.data;
+                    res.results.forEach((item, index) => {
+                        res.results[index].question = item.question.replace(
+                            '/[&#039;s][&][acute;]/g',
+                            ''
+                        );
+                    });
+                    setState(res);
                     localStorage.setItem(
                         'currentForm',
                         JSON.stringify(response.data.results)
@@ -117,12 +130,13 @@ const SelectionPage: React.FC = () => {
                     <Grid container item component={Paper} spacing={3} md={12}>
                         <Grid
                             container
+                            item
                             component={Typography}
                             className={classes.subtitle}
                         >
                             {`Gerar as ${numQuest} perguntas`}
                         </Grid>
-                        <Grid
+                        {/* <Grid
                             item
                             component={Button}
                             onClick={() => setChoosed(false)}
@@ -136,7 +150,32 @@ const SelectionPage: React.FC = () => {
                             onClick={() => onSubmit()}
                             text="START"
                             xs={6}
-                        />
+                        /> */}
+                        <Grid
+                            container
+                            item
+                            component={ButtonGroup}
+                            disableElevation
+                            variant="contained"
+                            color="primary"
+                        >
+                            <Grid
+                                className={classes.button}
+                                component={ButtonMT}
+                                xs={6}
+                                onClick={() => setChoosed(false)}
+                            >
+                                Cancel
+                            </Grid>
+                            <Grid
+                                className={classes.button}
+                                component={ButtonMT}
+                                xs={6}
+                                onClick={() => onSubmit()}
+                            >
+                                Start
+                            </Grid>
+                        </Grid>
                     </Grid>
                 )}
             </Grid>
