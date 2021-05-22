@@ -34,14 +34,12 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         minHeight: '60vh',
         maxHeight: '90vh',
-        padding: '6rem',
+        padding: '2rem',
         margin: '0px',
         overflowY: 'auto',
     },
     title: {
         fontSize: '3rem',
-        textAlign: 'center',
-        // fontFamily: 'Bangers',
         color: 'black',
     },
     subtitle: {
@@ -55,6 +53,9 @@ const useStyles = makeStyles(theme => ({
     },
     correctAnswer: {
         backgroundColor: 'rgba(0, 255, 0, 0.22)',
+    },
+    wrongAnswer: {
+        backgroundColor: 'rgba(190, 0, 0, 0.295)',
     },
     answer: {
         backgroundColor: 'white',
@@ -77,7 +78,13 @@ const Report: React.FC = () => {
     }, [storageReport]);
     return (
         <div className={classes.root}>
-            <Grid container component={Paper} className={classes.paper} md={6}>
+            <Grid
+                container
+                component={Paper}
+                className={classes.paper}
+                md={6}
+                xs={12}
+            >
                 {report && (
                     <>
                         <Grid
@@ -106,13 +113,18 @@ const Report: React.FC = () => {
                                     name="gender1"
                                     value={report.answers[index]}
                                 >
-                                    {item.allAnswers.map(option => (
+                                    {item.allAnswers.map((option, index2) => (
                                         <Grid
                                             item
                                             xs={12}
                                             className={
                                                 option === item.correct_answer
                                                     ? classes.correctAnswer
+                                                    : report.answers[index2] !==
+                                                          item.correct_answer &&
+                                                      report.answers[index2] ===
+                                                          option
+                                                    ? classes.wrongAnswer
                                                     : classes.answer
                                             }
                                             component={FormControlLabel}
