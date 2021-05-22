@@ -70,6 +70,16 @@ const Report: React.FC = () => {
     const [report, setReport] = useState<reportType>();
     const storageReport = localStorage.getItem('report');
 
+    const verifyAnswerClass = (
+        answered: string,
+        correct: string,
+        current: string
+    ) => {
+        if (current === correct) return classes.correctAnswer;
+        if (current === answered) return classes.wrongAnswer;
+        return classes.answer;
+    };
+
     useEffect(() => {
         if (storageReport) {
             const auxValues: reportType = JSON.parse(storageReport);
@@ -113,20 +123,15 @@ const Report: React.FC = () => {
                                     name="gender1"
                                     value={report.answers[index]}
                                 >
-                                    {item.allAnswers.map((option, index2) => (
+                                    {item.allAnswers.map(option => (
                                         <Grid
                                             item
                                             xs={12}
-                                            className={
-                                                option === item.correct_answer
-                                                    ? classes.correctAnswer
-                                                    : report.answers[index2] !==
-                                                          item.correct_answer &&
-                                                      report.answers[index2] ===
-                                                          option
-                                                    ? classes.wrongAnswer
-                                                    : classes.answer
-                                            }
+                                            className={verifyAnswerClass(
+                                                report.answers[index],
+                                                item.correct_answer,
+                                                option
+                                            )}
                                             component={FormControlLabel}
                                             value={option}
                                             control={<Radio />}
