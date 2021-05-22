@@ -188,6 +188,11 @@ const SelectionPage: React.FC = () => {
                                         currentQuest ? (
                                             <Grid
                                                 item
+                                                disabled={
+                                                    !values.answers[
+                                                        currentQuest
+                                                    ]
+                                                }
                                                 md={2}
                                                 component={Button}
                                                 onClick={() =>
@@ -199,6 +204,11 @@ const SelectionPage: React.FC = () => {
                                         ) : (
                                             <Grid
                                                 item
+                                                disabled={
+                                                    !values.answers[
+                                                        currentQuest
+                                                    ]
+                                                }
                                                 md={2}
                                                 component={Button}
                                                 type="submit"

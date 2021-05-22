@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Paper from '@material-ui/core/Paper';
@@ -8,7 +8,6 @@ import ButtonMT from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import { formApi } from 'services';
-import FormContext from 'contexts/form';
 import Button from 'components/mainButton';
 
 const useStyles = makeStyles(() => ({
@@ -51,22 +50,20 @@ const useStyles = makeStyles(() => ({
 const SelectionPage: React.FC = () => {
     const history = useHistory();
     const classes = useStyles();
-    const { setState } = useContext(FormContext);
-    const [numQuest, setNumQuest] = useState<string>();
+    const [numQuest, setNumQuest] = useState<number>();
     const [choosed, setChoosed] = useState<boolean>(false);
     const report = localStorage.getItem('report');
     const onSubmit = async () => {
         try {
             if (numQuest)
-                await formApi.get(parseInt(numQuest, 10)).then(response => {
+                await formApi.get(numQuest).then(response => {
                     const res = response.data;
                     res.results.forEach((item, index) => {
                         res.results[index].question = item.question.replace(
-                            '/[&#039;s][&][acute;]/g',
+                            /&quot|&#039;s|&ldquo;|&rdquo;|&#039;|;/g,
                             ''
                         );
                     });
-                    setState(res);
                     localStorage.setItem(
                         'currentForm',
                         JSON.stringify(response.data.results)
@@ -108,12 +105,13 @@ const SelectionPage: React.FC = () => {
                             placeholder="Quantidade de perguntas"
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
-                            ) => setNumQuest(event.target.value)}
+                            ) => setNumQuest(parseInt(event.target.value, 10))}
                             variant="outlined"
                             md={12}
                         />
                         <Grid
                             item
+                            disabled={!numQuest || numQuest <= 0}
                             onClick={() => setChoosed(true)}
                             component={Button}
                             text="Confirmar"
