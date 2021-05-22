@@ -69,7 +69,7 @@ const SelectionPage: React.FC = () => {
     const MyRadio: React.FC<MyRadioProps> = ({ label, ...props }) => {
         const [field] = useField<{}>(props);
         return (
-            <Grid md={12}>
+            <Grid xs={12}>
                 <FormControlLabel
                     {...field}
                     control={<Radio />}
@@ -130,7 +130,7 @@ const SelectionPage: React.FC = () => {
                                     justify="space-between"
                                     alignItems="flex-end"
                                     spacing={3}
-                                    md={12}
+                                    xs={12}
                                 >
                                     <>
                                         {values.questions.map((item, index) => (
@@ -182,7 +182,7 @@ const SelectionPage: React.FC = () => {
                                                 Anterior
                                             </Grid>
                                         ) : (
-                                            <Grid md={2} />
+                                            <Grid xs={2} />
                                         )}
                                         {currentForm.length - 1 >
                                         currentQuest ? (
