@@ -54,6 +54,7 @@ const SelectionPage: React.FC = () => {
     const { setState } = useContext(FormContext);
     const [numQuest, setNumQuest] = useState<string>();
     const [choosed, setChoosed] = useState<boolean>(false);
+    const report = localStorage.getItem('report');
     const onSubmit = async () => {
         try {
             if (numQuest)
@@ -119,10 +120,13 @@ const SelectionPage: React.FC = () => {
                             md={12}
                         />
                         <Grid
-                            disabled
+                            disabled={!report}
                             item
                             component={Button}
                             md={12}
+                            onClick={() => {
+                                history.push('/relatorio');
+                            }}
                             text="Histórico de resultados"
                         />
                     </Grid>
@@ -136,21 +140,6 @@ const SelectionPage: React.FC = () => {
                         >
                             {`Gerar as ${numQuest} perguntas`}
                         </Grid>
-                        {/* <Grid
-                            item
-                            component={Button}
-                            onClick={() => setChoosed(false)}
-                            text="CANCEL"
-                            xs={6}
-                        />
-
-                        <Grid
-                            item
-                            component={Button}
-                            onClick={() => onSubmit()}
-                            text="START"
-                            xs={6}
-                        /> */}
                         <Grid
                             container
                             item
