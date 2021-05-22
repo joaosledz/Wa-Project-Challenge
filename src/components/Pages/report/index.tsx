@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import Button from '@material-ui/core/Button';
 import {
     RadioGroup,
     Radio,
@@ -34,14 +33,12 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         minHeight: '60vh',
         maxHeight: '90vh',
-        padding: '6rem',
+        padding: '2rem',
         margin: '0px',
         overflowY: 'auto',
     },
     title: {
         fontSize: '3rem',
-        textAlign: 'center',
-        // fontFamily: 'Bangers',
         color: 'black',
     },
     subtitle: {
@@ -56,6 +53,9 @@ const useStyles = makeStyles(theme => ({
     correctAnswer: {
         backgroundColor: 'rgba(0, 255, 0, 0.22)',
     },
+    wrongAnswer: {
+        backgroundColor: 'rgba(190, 0, 0, 0.295)',
+    },
     answer: {
         backgroundColor: 'white',
     },
@@ -69,6 +69,16 @@ const Report: React.FC = () => {
     const [report, setReport] = useState<reportType>();
     const storageReport = localStorage.getItem('report');
 
+    const verifyAnswerClass = (
+        answered: string,
+        correct: string,
+        current: string
+    ) => {
+        if (current === correct) return classes.correctAnswer;
+        if (current === answered) return classes.wrongAnswer;
+        return classes.answer;
+    };
+
     useEffect(() => {
         if (storageReport) {
             const auxValues: reportType = JSON.parse(storageReport);
@@ -77,7 +87,13 @@ const Report: React.FC = () => {
     }, [storageReport]);
     return (
         <div className={classes.root}>
-            <Grid container component={Paper} className={classes.paper} md={6}>
+            <Grid
+                container
+                component={Paper}
+                className={classes.paper}
+                md={6}
+                xs={12}
+            >
                 {report && (
                     <>
                         <Grid
@@ -110,11 +126,11 @@ const Report: React.FC = () => {
                                         <Grid
                                             item
                                             xs={12}
-                                            className={
-                                                option === item.correct_answer
-                                                    ? classes.correctAnswer
-                                                    : classes.answer
-                                            }
+                                            className={verifyAnswerClass(
+                                                report.answers[index],
+                                                item.correct_answer,
+                                                option
+                                            )}
                                             component={FormControlLabel}
                                             value={option}
                                             control={<Radio />}
