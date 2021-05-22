@@ -8,7 +8,6 @@ import ButtonMT from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
 import { formApi } from 'services';
-// import FormContext from 'contexts/form';
 import Button from 'components/mainButton';
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +50,6 @@ const useStyles = makeStyles(() => ({
 const SelectionPage: React.FC = () => {
     const history = useHistory();
     const classes = useStyles();
-    // const { setState } = useContext(FormContext);
     const [numQuest, setNumQuest] = useState<number>();
     const [choosed, setChoosed] = useState<boolean>(false);
     const report = localStorage.getItem('report');
@@ -66,7 +64,6 @@ const SelectionPage: React.FC = () => {
                             ''
                         );
                     });
-                    // setState(res);
                     localStorage.setItem(
                         'currentForm',
                         JSON.stringify(response.data.results)

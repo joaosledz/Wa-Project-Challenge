@@ -1,6 +1,3 @@
-// import './assets/global.css';
-// import './yupLocale';
-
 import React, { memo } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
