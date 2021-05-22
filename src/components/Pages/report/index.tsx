@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -12,6 +13,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { reportType } from 'interfaces/form';
+import Button from 'components/mainButton';
 
 const useStyles = makeStyles(theme => ({
     backdrop: {
@@ -67,6 +69,7 @@ const useStyles = makeStyles(theme => ({
 const Report: React.FC = () => {
     const classes = useStyles();
     const [report, setReport] = useState<reportType>();
+    const history = useHistory();
     const storageReport = localStorage.getItem('report');
 
     const verifyAnswerClass = (
@@ -91,6 +94,7 @@ const Report: React.FC = () => {
                 container
                 component={Paper}
                 className={classes.paper}
+                justify="center"
                 md={6}
                 xs={12}
             >
@@ -140,6 +144,12 @@ const Report: React.FC = () => {
                                 </Grid>
                             </Grid>
                         ))}
+                        <Grid
+                            item
+                            component={Button}
+                            text="Gerar novo formulário"
+                            onClick={() => history.push('/selecao')}
+                        />
                     </>
                 )}
             </Grid>

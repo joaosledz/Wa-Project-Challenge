@@ -4,6 +4,7 @@ const useStyles = makeStyles<Theme>(theme =>
     createStyles({
         baseButton: {
             width: '100%',
+            maxWidth: '400px',
             height: 50,
             padding: '10px',
             marginTop: '8px',
