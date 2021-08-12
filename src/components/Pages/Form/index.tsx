@@ -111,7 +111,7 @@ const SelectionPage: React.FC = () => {
     return (
         <div className={classes.root}>
             {currentForm && (
-                <Grid container direction="column" spacing={3} md={6}>
+                <Grid container direction="column" md={6}>
                     <Grid
                         className={classes.title}
                         item
@@ -135,8 +135,6 @@ const SelectionPage: React.FC = () => {
                                     direction="row"
                                     justify="space-between"
                                     alignItems="flex-end"
-                                    spacing={3}
-                                    xs={12}
                                 >
                                     <>
                                         {values.questions.map((item, index) => (

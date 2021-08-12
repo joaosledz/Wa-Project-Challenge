@@ -108,10 +108,10 @@ const Report: React.FC = () => {
                         >
                             RELATÓRIO
                         </Grid>
-                        <Grid item xs={12} component={Typography}>
+                        <Grid container item xs={12} component={Typography}>
                             RESPOSTAS CORRETAS: {report.correctAnswers}
                         </Grid>
-                        <Grid item xs={12} component={Typography}>
+                        <Grid container item xs={12} component={Typography}>
                             RESPOSTAS INCORRETAS: {report.wrongAnswers}
                         </Grid>
                         {report.questions.map((item, index) => (
@@ -120,7 +120,9 @@ const Report: React.FC = () => {
                                     {`${index + 1} - ${item.question}`}
                                 </FormLabel>
                                 <Grid
+                                    style={{ paddingTop: '0.5rem' }}
                                     container
+                                    xs={12}
                                     component={RadioGroup}
                                     aria-label="gender"
                                     name="gender1"
@@ -129,7 +131,6 @@ const Report: React.FC = () => {
                                     {item.allAnswers.map(option => (
                                         <Grid
                                             item
-                                            xs={12}
                                             className={verifyAnswerClass(
                                                 report.answers[index],
                                                 item.correct_answer,
